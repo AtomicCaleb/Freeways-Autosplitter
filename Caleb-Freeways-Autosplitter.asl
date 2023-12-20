@@ -11,9 +11,11 @@ state("Freeways")
 
 init
 {
-	refreshRate = 30;
+	refreshRate = 30; //lots of people seem to do this and it can improve performance 
 	vars.startSimulateTime = new Time();
 	vars.currentSimulateTime = new Time();
+
+	//full simulation time is around 6.2 seconds but it calculates at 6 and you can exit out so need to compensate for that
 	vars.simulateLength = new TimeSpan(60000000); // 6 seconds
 }
 
@@ -21,8 +23,8 @@ split
 {	
 	if(vars.currentSimulateTime.RealTime > vars.simulateLength) //check if we have been simulating longer than the simulate time
 	{
-		vars.startSimulateTime = timer.CurrentTime;
-		vars.currentSimulateTime = new Time();
+		vars.startSimulateTime = timer.CurrentTime; //reset the timer so no chance of splitting again
+		vars.currentSimulateTime = new Time(); 
 		return true;
 	}
 	return false;
@@ -53,7 +55,6 @@ update
 	if(current.simulating == 1)
 		vars.currentSimulateTime = timer.CurrentTime - vars.startSimulateTime; //if we are simulating update the timer
 	
-	print(vars.currentSimulateTime.ToString());
 	return true;
 }
 
